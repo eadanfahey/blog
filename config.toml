@@ -1,0 +1,6 @@
+baseurl = "https://eadan.net/"
+title = "eadan.net"
+languageCode = "en-us"
+theme = "tufte"
+pygmentsCodeFences = true
+pygmentsUseClasses = true
