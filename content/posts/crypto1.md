@@ -63,7 +63,7 @@ using *cryptographic hash function*.
 
 A hash function takes some data of arbitrary size and produces a seemingly
 random string of fixed length. This string serves as a unique{{% sidenote %}}In theory, it is possible for a "collision" to occur - a hash function producing the same hash for different inputs. In 2017, researchers at Google and the CWI research institute in Amsterdam [generated a collision](https://security.googleblog.com/2017/02/announcing-first-sha1-collision.html) with the SHA-1 hashing algorithm. However, the computation required was immense - 6,500 years of CPU time alongside 110 years of GPU time!{{% /sidenote %}}
-fingerprint for the data. Like bitcoin, we will use the SHA-256 hash function. The python
+fingerprint for the data. Like bitcoin, we will use the SHA-256 hash function. The bash
 snippet below shows how changing the input to the hash function slightly produces a completely
 different hash.
 
