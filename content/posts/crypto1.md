@@ -67,12 +67,12 @@ fingerprint for the data. Like bitcoin, we will use the SHA-256 hash function. T
 snippet below shows how changing the input to the hash function slightly produces a completely
 different hash.
 
-{{< highlight python >}}
-hashlib.sha256(b"To be, or not to be").hexdigest()
+{{< highlight bash >}}
+echo "abc" | sha256sum
 #=> 80ed7fc26bc0bbb12ef93ae6dbc4bdaae8262e83e65163626e57c24b8fc316a8
 
-hashlib.sha256(b"To be, or not to be.").hexdigest()
-#=> 4a0aa387041df524f9acd333faecf2d1470db8b567473364186115bfc192f9f3
+echo "abcd" | sha256sum
+#=> fc4b5fd6816f75a7c81fc8eaa9499d6a299bd803397166e8c4cf9280b801d62c
 {{< /highlight >}}
 
 Another interesting property of cryptographic hash functions is that they are *one-way* - it is easy to
