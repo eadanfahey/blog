@@ -1,7 +1,6 @@
 +++
-draft = true
 title = "Let's build a cryptocurrency (part 2): Proof of Work"
-date = "2017-10-30"
+date = "2017-12-21"
 math = true
 +++
 
@@ -13,9 +12,9 @@ article we will overcome this limitation by slightly modifying the design with a
 the contents of the blockchain.
 
 The code for this article is stored under the
-[`part2_pow`](https://github.com/eadanfahey/raicoin/tree/part2_pow) git branch.
+[`part2_pow`](https://github.com/eadanfahey/ORaiml/tree/part2_pow) git branch.
 The updated codebase can be compared to the the code from part 1 
-[here](https://github.com/eadanfahey/raicoin/compare/part1_blockchain...part2_pow).
+[here](https://github.com/eadanfahey/ORaiml/compare/part1_blockchain...part2_pow).
 
 ## Proof-of-work: solving a puzzle
 
@@ -44,115 +43,93 @@ used by bitcoin.
 
 Specifically, this proof-of-work algorithm requires finding a value for the nonce such that the
 SHA256 hash of the block is less than{{%sidenote%}}Typically a hash is presented as a string, but this is just it's hexadecimal representation. For example, try running this in python: `int(hashlib.sha256(b'hello').hexdigest(), 16)` to see the more familiar base 10 representation.{{%/sidenote%}}
-an agreed upon target value. Due to the features of cryptographic hash functions
-we learned about, the only way to find a solution is by basically randomly picking a nonce value
-and checking if the hash of the block is less than the target value.
+an agreed upon target value. Due to the features of cryptographic hash functions that
+we learned about in previously, the only way to find a nonce to solve the puzzle is by brute force 
+iteration through the set of positive integers.
 
-The code snippet below shows an updated version of our `mine` method for creating a new block
-which finds a solution to the proof-of-work puzzle.
+The code snippet below shows an updated version of the `mine` function from the previous article
+for solving the proof-of-work puzzle.
 
-{{% marginnote %}}[`src/block.rs`](https://github.com/eadanfahey/raicoin/blob/part2_pow/src/block.rs#L28){{% /marginnote %}}
-{{< highlight rust >}}
-impl Block {
-    ...
-
-    pub fn mine(data: String, prev_block_hash: String) -> Block {
-        let timestamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_secs() as i64;
-
-        let mut block = Block {
-            timestamp,
-            data,
-            prev_block_hash,
-            nonce: 0,
-        };
-
-        let target = BigInt::one() << (256 - DIFFICULTY);
-
-        loop {
-            let hash_int = BigInt::from_str_radix(&block.hash(), 16).unwrap();
-            if hash_int < target {
-                break;
-            } else {
-                block.nonce += 1
-            }
-        }
-
-        block
-    }
-}
+{{% marginnote %}}[`src/block.ml`](https://github.com/eadanfahey/ORaiml/blob/part2_pow/src/block.ml#L25)<br><br>Since SHA256 outputs a 256 bit integer, we use [`bignum`](https://github.com/janestreet/bignum) library to get the integer representation of the block hash from its hexadecimal form.{{% /marginnote %}}
+{{< highlight ocaml >}}
+let mine ~data ~prevhash =
+  let timestamp = Time.now () |> to_epoch in
+  let rec mine_loop block =
+    let hash_int = Bigint.Hex.of_string ("0x" ^ (hash block)) in
+    match Bigint.(hash_int < Constants.pow_target) with
+    | true  -> block
+    | false -> mine_loop {block with nonce = block.nonce + 1}
+  in
+  mine_loop {timestamp; data; prevhash; nonce = 0}
 {{< /highlight >}}
 
-The main addition is within the `loop` block where we check if the current value of the nonce
-permits a solution to the puzzle and if it doesn't we increment and check again. The size of the
-`target` is controlled by the `DIFFICULTY` constant defined in
-[`src/constants.rs`](https://github.com/eadanfahey/raicoin/blob/part2_pow/src/constants.rs). The
-larger its value the more iterations are required{{%sidenote%}}The bitcoin mining difficulty is updated periodically such that a new block is "found" about every ten minutes.{{%/sidenote%}}
-, on average, to find a valid nonce.
+The main addition is the `mine_loop` function that finds a nonce to solve the proof-of-work 
+puzzle. Starting with the nonce set to zero, `mine_loop` recursively calls itself until the hash
+of the block is less than the target value. The target value - `pow_target` - is defined in
+`src/constants.ml`:
 
-When the network is presented with a new block it must check that it's nonce is indeed valid. 
-Therefore, we must also update the `validate_block` method of `Blockchain`:
+{{% marginnote %}}[`src/constants.ml`](https://github.com/eadanfahey/ORaiml/blob/part2_pow/src/constants.ml){{% /marginnote %}}
+{{< highlight ocaml >}}
+open Bignum
 
-{{% marginnote %}}[`src/blockchain.rs`](https://github.com/eadanfahey/raicoin/blob/part2_pow/src/blockchain.rs#L19){{% /marginnote %}}
-{{< highlight rust >}}
-impl Blockchain {
-    ...
-    
-    fn validate_block(&self, block: &Block) {
-        let target = BigInt::one() << (256 - DIFFICULTY);
-        let hash_int = BigInt::from_str_radix(&block.hash(), 16).unwrap();
+let pow_difficulty = 12
 
-        if block.prev_block_hash != self.last_block_hash {
-            panic!("Error: invalid previous_block_hash")
-        } else if hash_int > target {
-            panic!("Error: invalid nonce")
-        }
-    }
-    ...
-}
+let pow_target =
+  let i = Bigint.of_int (256 - pow_difficulty) in
+  let two = Bigint.of_int 2 in
+  Bigint.pow two i
 {{< /highlight >}}
 
-You can try out the new code by executing `cargo run`{{%sidenote%}}Ensure you are on the `part2_pow` branch.{{%/sidenote%}}
-in the terminal. You should see something like:
+The computational difficulty of mining is controlled by the `pow_difficulty` constant. The target
+value is calculated as $2^{256 - \text{pow_difficulty}}$, and so the larger the difficulty, the
+more iterations are required, on average, to find a valid nonce.
+
+When the network is presented with a new block it must check that its nonce is indeed valid. 
+Therefore, we must also update the `validate_block` function:
+
+{{% marginnote %}}[`src/blockchain.ml`](https://github.com/eadanfahey/ORaiml/blob/part2_pow/src/blockchain.ml#L11){{% /marginnote %}}
+{{< highlight rust >}}
+let validate_block curr_block prev_block =
+  let open Block in
+  let hash_int = Bigint.Hex.of_string ("0x" ^ (hash curr_block)) in
+  if curr_block.prevhash <> Some (hash prev_block) then
+    Error "Invalid previous block hash"
+  else if prev_block.timestamp > curr_block.timestamp then
+    Error "Invalid timestamp"
+  else if Bigint.(hash_int > Constants.pow_target) then
+    Error "Invalid nonce"
+  else
+    Ok ()
+{{< /highlight >}}
+
+As before, you can compile the project to a native executable with 
+`make native`{{%sidenote%}}Ensure you are on the `part2_pow` branch.{{%/sidenote%}} and call
+`./main.native` to run the project. You should see something like:
 
 ```
-==============================
+[
+  {
+    "timestamp": 1513893342.9278667,
+    "data": "Gravity's Rainbow",
+    "prevhash":
+      "000bb215413cc88dd9fbbe763771175176804261167898a9cdf528e3248fba8f",
+    "nonce": 3912
+  },
+  {
+    "timestamp": 1513893342.8890088,
+    "data": "Infinite Jest",
+    "prevhash": null,
+    "nonce": 1424
+  }
+]
 
-hash: 000988285ce5a8c334b5d733331630d171dda1ccf8f2bf6636a39f5b33f22fe1
-contents: {
-  "timestamp": 1511112426,
-  "data": "Gravity's Rainbow",
-  "prev_block_hash": "000be610a265339326663933274b7f223a4d4e13b01cfc76e5060701c468524d",
-  "nonce": 6728
-}
-
-==============================
-
-hash: 000be610a265339326663933274b7f223a4d4e13b01cfc76e5060701c468524d
-contents: {
-  "timestamp": 1511112426,
-  "data": "Infinte Jest",
-  "prev_block_hash": "0009ff95bd1ba0d07c9e61ea3aad3b6c105fcfd14646529bc974cf623ea09d27",
-  "nonce": 678
-}
-
-==============================
-
-hash: 0009ff95bd1ba0d07c9e61ea3aad3b6c105fcfd14646529bc974cf623ea09d27
-contents: {
-  "timestamp": 1511112425,
-  "data": "Genesis block",
-  "prev_block_hash": "",
-  "nonce": 3812
-}
+Hash of block1: 000bb215413cc88dd9fbbe763771175176804261167898a9cdf528e3248fba8f
 ```
 
-The code in `main.rs` is the same as in part 1; however, notice that the `nonce` field is no 
+The code in `main.ml` is the same as in part 1; however, notice that the `nonce` field is no 
 longer zero, but a valid solution to the proof-of-work puzzle. Try increasing the 
-`DIFFICULTY` constant in `constants.rs` and you should observe that the mining algorithm
-takes longer{{%sidenote%}}You may want to turn on compiler optimisations with `cargo run --release`{{%/sidenote%}} to find a valid nonce.
+`pow_difficulty` constant in `constants.ml` and you should observe that the mining algorithm
+takes longer to solve the proof-of-work puzzle.
 
 ## How does proof-of-work help?
 
@@ -184,5 +161,5 @@ permissionless and transparent method of *consensus*. This is the most amazing i
 by bitcoin - consensus with any middlemen or trusted third-parties.
 
 Before we discuss how a cryptocurrency can be built on top of a blockchain secured through
-proof-of-work, we will build a commandline interface to the blockchain and write some code to
-persist the state of the blockchain.
+proof-of-work, in the next article we will build a commandline interface to the blockchain and 
+write some code to persist the state of the blockchain to file.
