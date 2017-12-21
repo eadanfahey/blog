@@ -39,7 +39,7 @@ OCaml's package manager opam:
 
 ```
 opam install core utop merlin ocp-indent cryptokit \
-yojson ppx_deriving_yojson
+yojson ppx_deriving_yojson bignum
 ```
 
 ## What's with the name?
