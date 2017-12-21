@@ -27,14 +27,14 @@ We will implement a block as a record type, defining the `data` parameter to be 
 time being.
 
 {{% marginnote %}}[`src/block.ml`](https://github.com/eadanfahey/ORaiml/blob/part1_blockchain/src/block.ml#L3){{% /marginnote %}}
-```ocaml
+{{< highlight ocaml >}}
 type t = {
   timestamp: float;
   data: string;
   prevhash: string option;
   nonce: int;
 } [@@deriving yojson]
-```
+{{< /highlight >}}
 
 The first block in a blockchain, which is called the *genesis* block, does not have a
 previous block to point to, so we allow the `prevhash` field to be `None` with the `string option` 
