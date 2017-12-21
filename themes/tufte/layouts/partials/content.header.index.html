@@ -1,0 +1,11 @@
+<li>
+<h3 class="content-title-index">
+  {{ if .IsNode }}
+  <a href="{{ .Permalink }}">{{ .Title}}</a>
+  {{ else }}
+  <a href="{{ .RelPermalink }}">{{ .Title }}{{ if .Draft }} :: Draft {{end}}
+      <div align="right"><time datetime={{.Date}}>{{ .Date.Format "Jan 2, 2006" }}</time></div>
+  </a>
+  {{ end }}
+</h3>
+</li>

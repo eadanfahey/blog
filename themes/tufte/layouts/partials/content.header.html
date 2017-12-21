@@ -1,0 +1,15 @@
+<section>
+<h1 class="content-title">
+  {{ if .IsNode }}
+  <a href="{{ .Permalink }}">{{ .Title}}</a>
+  {{ else }}
+  <a href="{{ .RelPermalink }}">{{ .Title }}{{ if .Draft }} :: Draft {{end}}</a>
+  {{ end }}
+</h1>
+  <span class="content-meta">
+    {{ if not .Params.hidedate }}
+      <i class="fa fa-calendar"></i>
+      &nbsp;{{ .Date.Format "Jan 2, 2006" }}
+    {{end }}
+  </span>
+</section>
