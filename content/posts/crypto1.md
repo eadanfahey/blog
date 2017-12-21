@@ -4,7 +4,7 @@ date = "2017-12-20T22:22:22"
 +++
 
 The blockchain is the core data structure in most cryptocurrencies. While first popularised by
-its use as a distributed ledger for bitcoin, a blockchain can be used for storing
+its use as a distributed ledger with bitcoin, a blockchain can be used for storing
 arbitrary data - not just transaction records. There is an aura of mysticism surrounding the word
 "blockchain", but in reality it's a rather simple data structure - a 
 linked list of chunks of data called *blocks*. The real magic of the blockchain is not in the
