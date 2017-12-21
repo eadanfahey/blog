@@ -88,7 +88,7 @@ When the network is presented with a new block it must check that its nonce is i
 Therefore, we must also update the `validate_block` function:
 
 {{% marginnote %}}[`src/blockchain.ml`](https://github.com/eadanfahey/ORaiml/blob/part2_pow/src/blockchain.ml#L11){{% /marginnote %}}
-{{< highlight rust >}}
+{{< highlight ocaml >}}
 let validate_block curr_block prev_block =
   let open Block in
   let hash_int = Bigint.Hex.of_string ("0x" ^ (hash curr_block)) in
