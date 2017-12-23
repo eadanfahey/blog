@@ -281,6 +281,7 @@ Now that Carol's blockchain is just as everyone else's copy of the blockchain, w
 believe? Carol is presenting him with a perfectly valid blockchain which he has no reason to reject.
 The fact that it is so easy to overwrite the contents of the blockchain presents a severe flaw in
 our current design. A decentralised cryptocurrency where anyone can easily overwrite the 
-transaction history is not very useful. In the next article we will modify the design of blockchain,
+transaction history is not very useful. In the 
+[next article](../crypto2) we will modify the design of blockchain,
 incorporating a feature called "*proof of work*" which makes altering the contents of a blockchain
 practically impossible while maintaining the trust of the network.

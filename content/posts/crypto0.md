@@ -12,8 +12,8 @@ course of the series we will build a toy cryptocurrency together using the progr
 [OCaml](https://ocaml.org/).
 
   * [ Part 1: Blockchain ](../crypto1)
-  * [ Part 2: Proof of Work ](.) (coming soon!)
-  * [ Part 3: Persistence and a CLI ](.) (coming soon!)
+  * [ Part 2: Proof of Work ](../crypto2)
+  * [ Part 3: Persistence and a CLI ](../crypto3)
   * [ Part 4: Transactions ](.) (coming soon!)
   * [ Part 5: Cryptography ](.) (coming soon!)
   * [ Part 6: Mining Rewards ](.) (coming soon!)

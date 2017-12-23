@@ -161,5 +161,5 @@ permissionless and transparent method of *consensus*. This is the most amazing i
 by bitcoin - consensus with any middlemen or trusted third-parties.
 
 Before we discuss how a cryptocurrency can be built on top of a blockchain secured through
-proof-of-work, in the next article we will build a commandline interface to the blockchain and 
+proof-of-work, in the [next article](../crypto3) we will build a commandline interface to the blockchain and 
 write some code to persist the state of the blockchain to file.
