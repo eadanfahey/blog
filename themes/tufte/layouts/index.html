@@ -4,7 +4,7 @@
 <article class="pure-u-1">
   {{ partial "brand.html" . }}
   <ul class="archive">
-    {{ range .Site.Pages }}
+    {{ range .Site.RegularPages }}
       {{ partial "content.header.index.html" . }}
     {{ end  }}
     {{ partial "footer.html" . }}
