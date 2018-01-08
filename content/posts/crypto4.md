@@ -119,7 +119,7 @@ module TXOutput : sig
 end
 {{< /highlight >}}
 
-The`create` function of `TXOutput` takes the `value` of coins to send as a `float` and the
+The `create` function of `TXOutput` takes the `value` of coins to send as a `float` and the
 `recipient` of those coins as a `string`. The `value` and `recipient` functions are used for
 retieving the data stored within the abstract type `t`. The interface to the `TXInput` module,
 shown below, is similar.
