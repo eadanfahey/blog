@@ -187,7 +187,7 @@ into the blockchain of each network participant.
 
 {{% figure src="/images/mario-mining.png" type="full" %}}
 
-Coming back to our implementation, we have a data structure of standard
+Coming back to our implementation, we have a data structure for standard
 transactions - `StandardTX` - so let's make one for coinbase transactions too.
 
 {{% marginnote %}}[`src/transaction.mli`](https://github.com/eadanfahey/ORaiml/blob/part4_transactions/src/transaction.mli#L30){{% /marginnote %}}
