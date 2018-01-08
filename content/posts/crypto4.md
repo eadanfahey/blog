@@ -19,12 +19,12 @@ The updated codebase can be compared to the the code from part 3
 The system for transacting in a cryptocurrency such as bitcoin is very different from how one may
 imagine transactions occur in the traditional banking system. To illustrate this, let's bring back
 a few of the characters from previous articles. Suppose Alice instructs her bank to
-send \$20 dollars to Bob.
+send $20 dollars to Bob.
 
 {{% figure src="/images/bank-transaction.png" caption="A simplified version of a transaction between bank accounts." %}}
 
-We could imagine that the bank first checks that Alice has at least \$20 dollars in her bank account,
-and if she does, subtract \$20 from her account and add it to Bob's account. While this may be a
+We could imagine that the bank first checks that Alice has at least $20 dollars in her bank account,
+and if she does, subtract $20 from her account and add it to Bob's account. While this may be a
 highly simplified view of how a banking transaction occurs, it illustrates a key requirement of the
 traditional banking system - trust in a centralised third party. Depending on your viewpoint, this
 has several downsides - Alice must trust that the bank actually has her money{{%sidenote%}}With fractional reserve banking they don't! We saw the effects of this when Cypriot banks had to shut down to prevent a bank run during the financial crisis. https://www.theguardian.com/world/2013/mar/26/cyprus-banks-closed-prevent-run-deposits{{%/sidenote%}},
