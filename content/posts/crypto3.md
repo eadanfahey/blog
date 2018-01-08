@@ -91,5 +91,5 @@ Added block with hash 0000fa0f37ac132e7217fef8021d5e6cf4383132ece2768bd2d93294ec
 ## Conclusion
 
 This article was an interlude on our journey to creating a cryptocurrency. Now that we have a nice
-CLI for our blockchain there are exciting times ahead. In the next article we will begin
+CLI for our blockchain there are exciting times ahead. In the [next article](../crypto4) we will begin
 discussing how to build a transaction ledger atop our blockchain implementation.
