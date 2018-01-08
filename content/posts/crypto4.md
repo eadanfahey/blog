@@ -242,16 +242,16 @@ UTXO set data structure.
 ## The UTXO set
 
 Recall that the UTXO set is the set of all unspent transaction outputs in the blockchain. There
-are two ways we can go about implementing this set:
+are two ways we can go about constructing this set:
 
-  1. Scanning through the entire blockchain collecting all unspent transaction outputs each time
+  1. Scanning through the entire blockchain and collecting all unspent transaction outputs each time
      we need the UTXO set.
   2. Maintain the UTXO set alongside the blockchain which we update each time a new block is added
      to the blockchain.
      
 We will go for the second option as it saves us from having to compute the UTXO set each time
-we need to for example send coins or check someone's balance. I also found it easier to implement
-elegantly. Continuing or type driven approach to development, let's specify the interface to the
+we need to for example send coins or check someone's balance. Also, it allows for a more elegant
+implementation. Continuing our type driven approach to development, let's specify the interface to the
 `Utxo` module.
 
 {{% marginnote %}}[`src/utxo.mli`](https://github.com/eadanfahey/ORaiml/blob/part4_transactions/src/utxo.mli){{% /marginnote %}}
@@ -317,7 +317,7 @@ let t = List.append t (outputs tx)
 ```
 
 This extracts the transaction outputs from the transaction `tx` with the [`outputs`](https://github.com/eadanfahey/ORaiml/blob/part4_transactions/src/transaction.mli#L46) 
-function them to the UTXO list. If the transaction `tx` corresponds to a `Coinbase` transaction, 
+function and appends them to the UTXO list. If the transaction `tx` corresponds to a `Coinbase` transaction, 
 we are done since coinbase transactions do not contain any inputs. On the other hand, if `tx`
 corresponds to a `Standard` transaction we first extract the outputs referenced in the inputs with:
 
@@ -331,7 +331,7 @@ and then remove them from the UTXO list `t` with the line:
 List.fold ref_outputs ~init:t ~f:remove
 ```
 
-Here I am making use of the `remove` function that I defined which removes the first occurrence
+Here I am making use of the `remove` function defined above which removes the first occurrence
 of a specified element from a list, if it exists. It may be tempting here to filter the UTXO list,
 perhaps using the `List.filter` function, removing any output that matches one of those found in 
 `ref_outputs`. However, the UTXO set may contain multiple transaction outputs which are the same 
@@ -351,7 +351,7 @@ val utxo: t -> Utxo.t
 
 Alongside the list of blocks, the underlying implementation of the `Blockchain.t` abstract type
 now also includes it's corresponding UTXO set. Also, when creating a new blockchain with the
-`create` function, we now also create an empty UTXO set.
+`create` function an empty UTXO set is created.
 
 {{% marginnote %}}[`src/blockchain.ml`](https://github.com/eadanfahey/ORaiml/blob/part4_transactions/src/blockchain.ml#L5){{% /marginnote %}}
 {{< highlight ocaml >}}
@@ -393,7 +393,7 @@ blockchain. The rest of this function is similar to before, only now we return t
 UTXO, `utxo`, set alongside the blockchain.
 
 Implementing the `Utxo` module has been one of the more complex pieces of code we have seen so far.
-But, with the implementation complete, we can use the UTXO set for calculating user balances and
+But, with the implementation complete, we can use it when calculating user balances and
 creating transactions for sending coins between users.
 
 ## Calculating user balances
@@ -564,7 +564,7 @@ Since Alice only has a balance of 20 coins, an exception is raised.
 ## Conclusion and next steps
 
 We have completed the first step in building a cryptocurrency by using a blockchain as a secure
-transaction ledger. We have implemented the data structures required for represent transactions
+transaction ledger. Along the way, we have implemented the data structures required to represent transactions
 and modified the blockchain implementation to store them. We have also learned how to construct
 valid transactions for sending coins between users which is helped by an elegant solution to
 maintaining the UTXO set. However, we have not concretely defined the concept of *ownership* of
