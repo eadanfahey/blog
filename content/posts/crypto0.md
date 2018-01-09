@@ -14,7 +14,7 @@ course of the series we will build a toy cryptocurrency together using the progr
   * [ Part 1: Blockchain ](../crypto1)
   * [ Part 2: Proof of Work ](../crypto2)
   * [ Part 3: Persistence and a CLI ](../crypto3)
-  * [ Part 4: Transactions ](.) (coming soon!)
+  * [ Part 4: Transactions ](../crypto4)
   * [ Part 5: Cryptography ](.) (coming soon!)
   * [ Part 6: Mining Rewards ](.) (coming soon!)
 
